@@ -16,6 +16,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "ArtistServlet", urlPatterns = "/artist")
 public class ArtistServlet extends HttpServlet {
@@ -37,19 +38,21 @@ public class ArtistServlet extends HttpServlet {
 
         WebContext context = new WebContext(webExchange);
 
-        context.setVariable("ipAddress", req.getRemoteAddr());
-        context.setVariable("userAgent", req.getHeader("user-agent"));
-        context.setVariable("artists", artistService.listArtists());
-        context.setVariable("selectedSong",songService.findSelected());
+        String songId=req.getParameter("songId");
+
+        context.setVariable("artists", artistService.listArtists().stream()
+                .filter(x-> !songService.findByTrackId(songId)
+                        .getPerformers().contains(x)).collect(Collectors.toList()));
+
+        context.setVariable("selectedSong",songId);
         templateEngine.process("artistsList.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String artistId = req.getParameter("artistId");
-        Song selected=songService.findSelected();
-        Artist artist=artistService.ArtistfindById(Long.valueOf(artistId)).orElseThrow(()-> new ArtistNotFoundException(Long.valueOf(artistId)));
-        songService.addArtistToSong(artist,selected);
-        resp.sendRedirect("/songDetails");
+        long artistId = Long.parseLong(req.getParameter("artistId"));
+        String songId = req.getParameter("songId");
+        songService.addArtistToSong(artistService.ArtistfindById(artistId),songService.findByTrackId(songId));
+        resp.sendRedirect("/songDetails?songId="+songId);
     }
 }

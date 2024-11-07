@@ -16,11 +16,9 @@ import java.util.List;
 public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
-    private final ArtistRepository artistRepository;
 
-    public SongServiceImpl(SongRepository songRepository, ArtistRepository artistRepository) {
+    public SongServiceImpl(SongRepository songRepository) {
         this.songRepository = songRepository;
-        this.artistRepository = artistRepository;
     }
 
 
@@ -30,26 +28,20 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Artist addArtistToSong(Artist artist, Song song) {
-        return songRepository.addArtistToSong(artist,song)
-                .orElseThrow(()->new ArtistNotFoundException(artist.getId()));
-    }
-
-    @Override
     public Song findByTrackId(String trackId) {
-        return songRepository.findById(trackId)
-                .orElseThrow(()->new SongNotFoundException(trackId));
+        return songRepository.findById(trackId);
     }
 
     @Override
-    public Song selectSong(Song song) {
-        return songRepository.selectSong(song).orElseThrow(()->new SongNotFoundException(song.getTrackId()));
+    public void addGrade(String songId, Integer grade) {
+        Song song=songRepository.findById(songId);
+        song.addGrade(grade);
     }
 
     @Override
-    public Song findSelected() {
-        return songRepository.findSelectedSong().orElseThrow(()->new NoSongSelectedException());
+    public void addArtistToSong(Artist artist, Song song) {
+        songRepository.addArtistToSong(artist, song);
+        System.out.println("Check");
     }
-
 
 }

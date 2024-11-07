@@ -26,22 +26,20 @@ public class SongListServlet extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        IWebExchange webExchange= JakartaServletWebApplication
+        IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(req, resp);
+
         WebContext context = new WebContext(webExchange);
-
-        context.setVariable("ipAddress", req.getRemoteAddr());
-        context.setVariable("userAgent", req.getHeader("user-agent"));
-        context.setVariable("songs", songService.listSongs());
-
-        templateEngine.process("listSongs.html", context, resp.getWriter());
+        context.setVariable("songs",songService.listSongs());
+        templateEngine.process("listSongs.html",context,resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String trackId = req.getParameter("trackId");
-        songService.selectSong(songService.findByTrackId(trackId));
-        resp.sendRedirect("/artist");
+        String songId = req.getParameter("trackId");
+        Integer grade=Integer.parseInt(req.getParameter("grade"));
+        songService.addGrade(songId,grade);
+        resp.sendRedirect("/artist?songId="+songId);
     }
 }

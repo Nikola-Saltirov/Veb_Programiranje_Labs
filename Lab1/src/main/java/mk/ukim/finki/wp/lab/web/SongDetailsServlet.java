@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.service.SongService;
 import mk.ukim.finki.wp.lab.service.impl.SongServiceImpl;
 import org.thymeleaf.context.WebContext;
@@ -34,9 +35,15 @@ public class SongDetailsServlet extends HttpServlet {
 
         WebContext context = new WebContext(webExchange);
 
-        context.setVariable("ipAddress", req.getRemoteAddr());
-        context.setVariable("userAgent", req.getHeader("user-agent"));
-        context.setVariable("songs", songService.listSongs());
-        templateEngine.process("songDetails.html", context, resp.getWriter());
+        String songId = req.getParameter("songId");
+        Song song = songService.findByTrackId(songId);
+
+        context.setVariable("songTitle", song.getTitle());
+        context.setVariable("genre", song.getGenre());
+        context.setVariable("year", song.getReleaseYear());
+        context.setVariable("artists", song.getPerformers());
+        context.setVariable("grade", song.getAvg());
+
+        templateEngine.process("songDetails.html",context,resp.getWriter());
     }
 }

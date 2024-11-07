@@ -5,26 +5,22 @@
 
 </head>
 <body>
-<!-- Dynamic Display> </!-->
+<!-- dynamically display data -->
 <header>
-   <h1>Song title</h1>
+    <h1 th:text="${songTitle}"></h1>
 </header>
-<section xmlns:th="http://www.thymeleaf.org">
-    <div th:if="${songs.size()>0}">
-        <div th:each="song : ${songs}">
-            <h2>Genre <span th:text="${song.getGenre()}"></span></h2>
-            <h2>Year <span th:text="${song.getReleaseYear()}"></h2>
-            <h2>Performers:</h2>
-            <div th:each="artist : ${song.getPerformers()}">
-                <ul>
-                    <li><span th:text="${artist.getName()}"></span>
-                        <span> </span>
-                        <span th:text="${artist.getLastName()}"></span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<section>
+    <strong> Genre: </strong><th:block th:text="${genre}"></th:block></br>
+    <strong> Release Year: </strong><th:block th:text="${year}"></th:block>
+    <strong> Grade: </strong><th:block th:text="${grade}"></th:block>
+    <h2>Performers:</h2>
+    <ul th:each="artist : ${artists}">
+        <li>
+            <span th:text="${artist.getName()}"></span>
+            <span> </span>
+            <span th:text="${artist.getLastName()}"></span>
+        </li>
+    </ul>
 </section>
 
 </body>

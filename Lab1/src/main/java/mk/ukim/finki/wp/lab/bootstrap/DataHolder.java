@@ -22,17 +22,12 @@ public class DataHolder {
         artists.add(new Artist(3L,"Frank","Harvey","He funny"));
 
         songs=new ArrayList<>();
-        songs.add(new Song("1","One","metal",1984));
-        songs.add(new Song("1","Two","metal",1984));
-        songs.add(new Song("1","Three","metal",1984));
-        songs.add(new Song("1","Four","metal",1984));
-        songs.add(new Song("1","Five","metal",1984));
+        songs.add(new Song("1","One","metal",1984,new ArrayList<>(),new ArrayList<>()));
+        songs.add(new Song("1","Two","metal",1984,new ArrayList<>(),new ArrayList<>()));
+        songs.add(new Song("1","Three","metal",1984,new ArrayList<>(),new ArrayList<>()));
+        songs.add(new Song("1","Four","metal",1984,new ArrayList<>(),new ArrayList<>()));
+        songs.add(new Song("1","Five","metal",1984,new ArrayList<>(),new ArrayList<>()));
 
         selectedSong=null;
-    }
-
-    public static Song selectSong(Song song){
-        DataHolder.selectedSong=song;
-        return song;
     }
 }
