@@ -1,4 +1,5 @@
 package mk.ukim.finki.wp.lab.repository;
+import lombok.Data;
 import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
 
 import mk.ukim.finki.wp.lab.model.Artist;
@@ -11,7 +12,7 @@ import java.util.Optional;
 @Repository
 public class SongRepository {
     public List<Song> findAll(){
-        return DataHolder.songs;
+        return DataHolder.songs.stream().toList();
     }
 
     public Optional<Song> findById(String id) {
@@ -28,4 +29,11 @@ public class SongRepository {
         }
     }
 
+    public Optional<Song> selectSong(Song song){
+        return Optional.of(DataHolder.selectSong(song));
+    }
+
+    public Optional<Song> findSelectedSong() {
+        return Optional.of(DataHolder.selectedSong);
+    }
 }

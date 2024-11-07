@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class ArtistRepository {
     public List<Artist> findAll() {
-        return DataHolder.artists;
+        return DataHolder.artists.stream().toList();
     }
     public Optional<Artist> findById(Long id) {
         return DataHolder.artists.stream().filter(i -> i.getId().equals(id)).findFirst();

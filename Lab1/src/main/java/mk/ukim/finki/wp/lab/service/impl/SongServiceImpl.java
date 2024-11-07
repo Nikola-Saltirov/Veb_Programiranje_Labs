@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.lab.service.impl;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import mk.ukim.finki.wp.lab.model.exceptions.ArtistNotFoundException;
+import mk.ukim.finki.wp.lab.model.exceptions.NoSongSelectedException;
 import mk.ukim.finki.wp.lab.model.exceptions.SongNotFoundException;
 import mk.ukim.finki.wp.lab.repository.ArtistRepository;
 import mk.ukim.finki.wp.lab.repository.SongRepository;
@@ -39,4 +40,16 @@ public class SongServiceImpl implements SongService {
         return songRepository.findById(trackId)
                 .orElseThrow(()->new SongNotFoundException(trackId));
     }
+
+    @Override
+    public Song selectSong(Song song) {
+        return songRepository.selectSong(song).orElseThrow(()->new SongNotFoundException(song.getTrackId()));
+    }
+
+    @Override
+    public Song findSelected() {
+        return songRepository.findSelectedSong().orElseThrow(()->new NoSongSelectedException());
+    }
+
+
 }

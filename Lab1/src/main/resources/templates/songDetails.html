@@ -9,14 +9,22 @@
 <header>
    <h1>Song title</h1>
 </header>
-<section>
-    <h2>Genre</h2>
-    <h2>Year</h2>
-    <h2>Performers:</h2>
-    <ul>
-        <li>Jon Bon Jovi</li>
-        <li>Richie Sambora</li>
-    </ul>
+<section xmlns:th="http://www.thymeleaf.org">
+    <div th:if="${songs.size()>0}">
+        <div th:each="song : ${songs}">
+            <h2>Genre <span th:text="${song.getGenre()}"></span></h2>
+            <h2>Year <span th:text="${song.getReleaseYear()}"></h2>
+            <h2>Performers:</h2>
+            <div th:each="artist : ${song.getPerformers()}">
+                <ul>
+                    <li><span th:text="${artist.getName()}"></span>
+                        <span> </span>
+                        <span th:text="${artist.getLastName()}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </section>
 
 </body>
