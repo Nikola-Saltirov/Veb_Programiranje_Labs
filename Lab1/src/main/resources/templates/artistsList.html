@@ -32,19 +32,19 @@
 </header>
 <section>
     <h2>Select artist:</h2>
-    <form th:method="POST">
+    <form th:action="@{'/artist/add/{id}' (id=${songId})}" th:method="POST">
 
         <th:block th:each="artist : ${artists}">
-            <input type="radio" name="artistId" th:value="${artist.getId()}">
             <label>
-                <span th:text="${artist.getName()}"></span>
-                <span> </span>
-                <span th:text="${artist.getLastName()}"></span>
+                <input type="radio" name="artistId" th:value="${artist.getId()}">
             </label>
-            <br/>
+            <label>
+                <span th:text="${artist.getName() + ' ' + artist.getLastName()}"></span>
+            </label>
+            <br>
 
         </th:block>
-        <input type='submit' value='Add artist'>
+        <button type="submit">Add artist</button>
     </form>
 
 </section>

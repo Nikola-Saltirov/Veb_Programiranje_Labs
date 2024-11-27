@@ -1,13 +1,10 @@
-package mk.ukim.finki.wp.lab.web;
+package mk.ukim.finki.wp.lab.web.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mk.ukim.finki.wp.lab.model.Artist;
-import mk.ukim.finki.wp.lab.model.Song;
-import mk.ukim.finki.wp.lab.model.exceptions.ArtistNotFoundException;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.thymeleaf.context.WebContext;
@@ -52,7 +49,7 @@ public class ArtistServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long artistId = Long.parseLong(req.getParameter("artistId"));
         String songId = req.getParameter("songId");
-        songService.addArtistToSong(artistService.ArtistfindById(artistId),songService.findByTrackId(songId));
+        songService.addArtistToSong(artistService.findById(artistId).orElse(null),songService.findByTrackId(songId));
         resp.sendRedirect("/songDetails?songId="+songId);
     }
 }

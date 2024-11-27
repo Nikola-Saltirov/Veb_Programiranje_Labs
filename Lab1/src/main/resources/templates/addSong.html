@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2 th:text="(${songId == null} ? 'Add new song' : 'Edit song')"></h2>
+<div th:if="${songId != null}">
+    Title: <span th:text="${song.getTitle()}"></span><br>
+    Genre: <span th:text="${song.getGenre()}"></span><br>
+    Release Year: <span th:text="${song.getReleaseYear()}"></span><br>
+    Album: <span th:text="${song.getAlbum().getName()}"></span><br><br>
+</div>
+<!-- Dali ima podobar nachin da se napravi patekata za ova dolu-->
+<form th:action="(${songId == null} ? '/songs/add' : '/songs/edit/' + ${songId} + '?')" method="POST">
+    <label for="title">Enter a title:</label>
+    <input type="text" id="title" name="title"><br>
+
+    <label for="trackId">Enter a trackId:</label>
+    <input type="text" id="trackId" name="trackId"><br>
+
+    <label for="genre">Enter the genre:</label>
+    <input type="text" id="genre" name="genre"><br>
+
+    <label for="releaseYear">Enter the release year:</label>
+    <input type="text" id="releaseYear" name="releaseYear"><br>
+
+    <label for="albumId">Select the album</label>
+    <select id="albumId" name="albumId">
+        <option th:each="album : ${albums}"
+                th:value="${album.getId()}"
+                th:text="${album.getName()}"></option>
+    </select><br><br>
+
+    <button type="submit" th:text="(${songId == null} ? 'Add song' : 'Edit song')"></button>
+</form>
+</body>
+</html>

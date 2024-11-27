@@ -15,14 +15,38 @@ public class SongRepository {
         return DataHolder.songs.stream().toList();
     }
 
-    public Song findById(String id) {
-        return DataHolder.songs.stream().filter(i -> i.getTrackId().equals(id)).findFirst().orElse(null);
+    public Song findByTrackId(String trackId) {
+        return DataHolder.songs.stream().filter(x -> x.getTrackId().equals(trackId)).findFirst().orElse(null);
+    }
+
+    public Song findBySongId(Long id) {
+        return DataHolder.songs.stream().filter(x->x.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public int findIndexById(Long id) {
+        for (int i = 0; i < DataHolder.songs.size(); i++) {
+            if (DataHolder.songs.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void addArtistToSong(Artist artist, Song song) {
-        Song temp=DataHolder.songs.stream().filter(s->s.equals(song)).findFirst().orElse(null);
-        if(temp!=null) {
-            temp.addArtist(artist);
+        findByTrackId(song.getTrackId()).getPerformers().add(artist);
+    }
+
+    public void deleteSong(Long id) {
+        DataHolder.songs.removeIf(x->x.getId().equals(id));
+    }
+
+    public void saveSong(Song song) {
+        int idx = findIndexById(song.getId());
+        if(idx == -1) {
+            DataHolder.songs.add(song);
+        }
+        else {
+            DataHolder.songs.set(idx, song);
         }
     }
 }
