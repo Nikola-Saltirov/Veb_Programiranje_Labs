@@ -45,6 +45,19 @@
     </div>
 
     <h2>Choose a song:</h2>
+
+    <th:block>
+        <form th:action="@{'/songs/filtered'}" th:method="POST" class="dropdownGenres">
+            <select name="genre" id="genre">
+                <option th:each="genre:${genres}" th:text="${genre}" th:value="${genre}">
+                </option>
+                <option th:value="All" th:text="All">
+                </option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+    </th:block>
+
     <th:block th:if="${songs.size()>0}">
         <th:block th:each="song : ${songs}" class="inputs">
             <span> Title: </span>

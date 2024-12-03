@@ -6,13 +6,19 @@ import mk.ukim.finki.wp.lab.model.Song;
 import org.springframework.stereotype.Repository;
 
 import javax.xml.crypto.Data;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class SongRepository {
     public List<Song> findAll(){
-        return DataHolder.songs.stream().toList();
+        if (DataHolder.filterGenre == null || DataHolder.filterGenre.equals("All")){
+            return DataHolder.songs.stream().toList();
+        }else{
+            return DataHolder.songs.stream().filter(s->s.getGenre().equals(DataHolder.filterGenre)).toList();
+        }
     }
 
     public Song findByTrackId(String trackId) {
@@ -48,5 +54,17 @@ public class SongRepository {
         else {
             DataHolder.songs.set(idx, song);
         }
+    }
+
+    public void setFilter(String genre) {
+        DataHolder.filterGenre=genre;
+    }
+
+    public List<String> getGenres() {
+        List<Song> songs=DataHolder.songs;
+        List<String> genres=songs.stream().map(Song::getGenre).toList();
+        Set<String> g1=new HashSet<>();
+        g1.addAll(genres);
+        return g1.stream().toList();
     }
 }

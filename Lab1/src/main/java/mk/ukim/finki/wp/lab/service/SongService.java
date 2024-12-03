@@ -19,4 +19,8 @@ public interface SongService {
     Song findBySongId(Long id);
 
     void deleteById(Long id);
+
+    List<String> getGenres();
+
+    void setFilter(String genre);
 }

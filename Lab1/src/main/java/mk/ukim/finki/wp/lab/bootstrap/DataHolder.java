@@ -16,6 +16,7 @@ public class DataHolder {
     //possibly useless
     public static Song selectedSong = null;
     public static List<Album> albums;
+    public static String filterGenre;
 
     @PostConstruct
     public void init(){
@@ -42,5 +43,6 @@ public class DataHolder {
         songs.add(new Song("5","Five","Jazz",2013,artists.subList(4,5),albums.get(4)));
 
         selectedSong=null;
+        filterGenre=null;
     }
 }

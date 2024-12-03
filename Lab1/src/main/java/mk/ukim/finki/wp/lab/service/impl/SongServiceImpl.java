@@ -53,6 +53,16 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    public List<String> getGenres() {
+        return songRepository.getGenres();
+    }
+
+    @Override
+    public void setFilter(String genre) {
+        songRepository.setFilter(genre);
+    }
+
+    @Override
     public void addNewSong(String title, String trackId, String genre, int releaseYear, Album album) {
         if(title == null || title.isEmpty()
                 || trackId == null || trackId.isEmpty()
