@@ -20,71 +20,45 @@
     <h1>Welcome to My Music Store</h1>
 </header>
 <main>
-    <h2>Choose a song:</h2>
-    <th:block th:if="${songs.size()>0}">
-        <form th:action="@{'/artist'}" method="POST">
-            <th:block th:each="song : ${songs}" class="inputs">
+    <h2>Choose a song to add an artist:</h2>
+    <form th:action="@{'/artist'}" th:method="POST">
+        <th:block th:each="song : ${songs}">
+            <label>
                 <input type="radio" name="trackId" th:value="${song.getTrackId()}">
-                <span> Title: </span>
-                <span th:text="${song.getTitle()}"></span>
-                <span> Add Grade </span>
-                <input type="text" name="grade">
-                <span> Genre: </span>
-                <span th:text="${song.getGenre()}"></span>
-                <span> Release Year: </span>
-                <span th:text="${song.getReleaseYear()}"></span>
-                <span> Album: </span>
-                <span th:text="${song.getAlbum().getName()}"></span>
-                <br/>
-            </th:block>
-            <input type='submit' value='Submit'>
+                Title: <span th:text="${song.getTitle()}"></span>
+                Genre: <span th:text="${song.getGenre()}"></span>
+                Release Year: <span th:text="${song.getReleaseYear()}"></span>
+                Album : <span th:text="${song.getAlbum().getName()}"></span>
+            </label><br>
+        </th:block><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Add, edit or delete a song:</h2>
+    <th:block th:each="song : ${songs}">
+
+        Title: <span th:text="${song.getTitle()}"></span>
+        Genre: <span th:text="${song.getGenre()}"></span>
+        Release Year: <span th:text="${song.getReleaseYear()}"></span>
+        Album : <span th:text="${song.getAlbum().getName()}"></span>
+
+        <form th:action="@{'/songs/edit/{id}' (id=${song.getId()})}" th:method="GET" style="display: inline">
+            <button type="submit">Edit</button>
         </form>
-    </th:block>
-    <div th:if="${songs.size() == 0}">
-        <p>No songs available to choose from.</p>
-    </div>
 
-    <h2>Choose a song:</h2>
-
-    <th:block>
-        <form th:action="@{'/songs/filtered'}" th:method="POST" class="dropdownGenres">
-            <select name="genre" id="genre">
-                <option th:each="genre:${genres}" th:text="${genre}" th:value="${genre}">
-                </option>
-                <option th:value="All" th:text="All">
-                </option>
-            </select>
-            <button type="submit">Filter</button>
+        <form th:action="@{'/songs/delete/{id}' (id=${song.getId()})}" th:method="POST" style="display: inline">
+            <button type="submit">Delete</button>
         </form>
-    </th:block>
+        <br>
 
-    <th:block th:if="${songs.size()>0}">
-        <th:block th:each="song : ${songs}" class="inputs">
-            <span> Title: </span>
-            <span th:text="${song.getTitle()}"></span>
-            <span> Genre: </span>
-            <span th:text="${song.getGenre()}"></span>
-            <span> Release Year: </span>
-            <span th:text="${song.getReleaseYear()}"></span>
-            <span> Album: </span>
-            <span th:text="${song.getAlbum().getName()}"></span>
+    </th:block><br>
 
-            <form th:action="@{'/songs/edit/{id}' (id=${song.getId()})}" th:method="GET" class="btn_form">
-                <button type="submit">Edit Song</button>
-            </form>
-            <form th:action="@{'/songs/delete/{id}' (id=${song.getId()})}" th:method="DELETE" class="btn_form">
-                <button type="submit">Delete Song</button>
-            </form>
-            <br>
-        </th:block>
-    </th:block>
-    <br>
-    <div th:if="${songs.size() == 0}">
-        <p>No songs available to choose from.</p>
-    </div>
-    <form th:action="@{'songs/add'}" th:method="GET">
+    <form th:action="@{'/songs/add'}" th:method="GET">
         <button type="submit">Add New Song</button>
     </form>
+
+
 
 </main>
 </body>

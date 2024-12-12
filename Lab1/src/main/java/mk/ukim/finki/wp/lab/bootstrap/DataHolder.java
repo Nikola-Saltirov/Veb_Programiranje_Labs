@@ -3,7 +3,6 @@ package mk.ukim.finki.wp.lab.bootstrap;
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
-import mk.ukim.finki.wp.lab.model.Grade;
 import mk.ukim.finki.wp.lab.model.Song;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +13,7 @@ import java.util.List;
 public class DataHolder {
     public static List<Artist> artists = null;
     public static List<Song> songs = null;
-    public static List<Grade> grades = null;
-    public static Song selectedSong = null;
     public static List<Album> albums;
-    public static String filterGenre;
 
     @PostConstruct
     public void init(){
@@ -35,14 +31,6 @@ public class DataHolder {
         albums.add(new Album("Shining Diamonds", "Metal", "1976"));
         albums.add(new Album("Suspension", "Jazz", "2013"));
 
-        grades = new ArrayList<>();
-        grades.add(new Grade(1));
-        grades.add(new Grade(2));
-        grades.add(new Grade(3));
-        grades.add(new Grade(4));
-        grades.add(new Grade(5));
-
-
         songs=new ArrayList<>();
         songs.add(new Song("1","One","Jazz",2024,artists.subList(0,1),albums.get(0)));
         songs.add(new Song("2","Two","Rap",2024,artists.subList(1,2),albums.get(1)));
@@ -50,7 +38,5 @@ public class DataHolder {
         songs.add(new Song("4","Four","Metal",1976,artists.subList(3,4),albums.get(3)));
         songs.add(new Song("5","Five","Jazz",2013,artists.subList(4,5),albums.get(4)));
 
-        selectedSong=null;
-        filterGenre=null;
     }
 }

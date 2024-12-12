@@ -26,6 +26,5 @@ public class Album {
         this.name = name;
         this.genre = genre;
         this.releaseYear = releaseYear;
-        this.id = (long) (Math.random() * 1000);
     }
 }

@@ -25,22 +25,20 @@ public class ArtistController {
     }
 
     @PostMapping
-    public String getAddArtistPage(@RequestParam String trackId, @RequestParam String grade, Model model) {
-        model.addAttribute("artists", artistService.listArtists().stream().filter(x->!songService.findByTrackId(trackId).getArtists().contains(x)));
+    public String getAddArtistPage(@RequestParam String trackId, Model model) {
+        model.addAttribute("artists", artistService.listArtists().stream()
+                .filter(x->!songService.findByTrackId(trackId).getArtists().contains(x)));
         model.addAttribute("songId", trackId);
-        String resultString = grade.replaceAll(",", "");
-        songService.addGrade(trackId,Integer.parseInt(resultString));
         return "artistsList";
     }
 
     @PostMapping("/add/{id}")
     public String addArtist(@PathVariable String id,
-                            @RequestParam(required = false) Long artistId) {
+                            @RequestParam Long artistId) {
+
         Song song = songService.findByTrackId(id);
-        if (artistId != null) {
-            Artist artist = artistService.findById(artistId).orElse(null);
-            songService.addArtistToSong(artist, song);
-        }
+        Artist artist = artistService.findById(artistId).orElse(null);
+        artistService.addSongToArtist(artist, song);
         return "redirect:/songDetails/" + song.getId();
     }
 

@@ -38,7 +38,6 @@ public class SongListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String songId = req.getParameter("trackId");
         Integer grade=Integer.parseInt(req.getParameter("grade"));
-        songService.addGrade(songId,grade);
         resp.sendRedirect("/artist?songId="+songId);
     }
 }

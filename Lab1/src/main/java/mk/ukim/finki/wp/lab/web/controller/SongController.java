@@ -26,7 +26,6 @@ public class SongController {
         model.addAttribute("albums", albumService.findAll());
         model.addAttribute("songs", songService.listSongs());
         model.addAttribute("error", error);
-        model.addAttribute("genres", songService.getGenres());
         return "listSongs";
     }
 
@@ -84,16 +83,12 @@ public class SongController {
     public String deleteSong(@PathVariable Long id) {
         try {
             artistService.removeSongFromArtists(id);
-            songService.deleteById(id);
+            songService.deleteSongById(id);
         }
         catch (Exception e) {
             return "redirect:/songs";
         }
         return "redirect:/songs";
     }
-    @PostMapping("/filtered")
-    public String filterSongs(@RequestParam String genre){
-        songService.setFilter(genre);
-        return "redirect:/songs";
-    }
+
 }

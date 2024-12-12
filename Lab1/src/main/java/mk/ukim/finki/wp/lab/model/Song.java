@@ -12,7 +12,6 @@ import java.util.OptionalDouble;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Song {
 
@@ -28,9 +27,6 @@ public class Song {
     @ManyToMany(mappedBy = "songs")
     private List<Artist> artists = new ArrayList<>();
 
-
-    @ManyToMany(mappedBy = "grades")
-    private List<Grade> grades;
 
     @ManyToOne
     private Album album;
@@ -50,17 +46,5 @@ public class Song {
         this.releaseYear = releaseYear;
         this.artists = artists;
         this.album = album;
-    }
-
-    public void addGrade(int grade) {
-        grades.add(new Grade(grade));
-    }
-
-    public Double getAvg(){
-        int sum=0;
-        for (Grade grade : grades) {
-            sum+=grade.getGrade();
-        }
-        return sum/(double)grades.size();
     }
 }

@@ -41,7 +41,6 @@ public class SongDetailsServlet extends HttpServlet {
         context.setVariable("genre", song.getGenre());
         context.setVariable("year", song.getReleaseYear());
         context.setVariable("artists", song.getArtists());
-        context.setVariable("grade", song.getAvg());
 
         templateEngine.process("songDetails.html",context,resp.getWriter());
     }

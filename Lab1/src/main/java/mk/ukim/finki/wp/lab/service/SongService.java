@@ -11,16 +11,11 @@ public interface SongService {
     void addArtistToSong(Artist artist, Song song);
     Song findByTrackId(String trackId);
 
-    void addGrade(String songId, Integer grade);
     void addNewSong(String title, String trackId, String genre, int releaseYear, Album album);
 
     void editSong(Long songId, String title, String trackId, String genre, int i, Album album);
 
     Song findBySongId(Long id);
 
-    void deleteById(Long id);
-
-    List<String> getGenres();
-
-    void setFilter(String genre);
+    void deleteSongById(Long id);
 }

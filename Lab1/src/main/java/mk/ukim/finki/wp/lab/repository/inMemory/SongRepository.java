@@ -12,11 +12,7 @@ import java.util.Set;
 @Repository
 public class SongRepository {
     public List<Song> findAll(){
-        if (DataHolder.filterGenre == null || DataHolder.filterGenre.equals("All")){
-            return DataHolder.songs.stream().toList();
-        }else{
-            return DataHolder.songs.stream().filter(s->s.getGenre().equals(DataHolder.filterGenre)).toList();
-        }
+        return null;
     }
 
     public Song findByTrackId(String trackId) {
@@ -55,7 +51,7 @@ public class SongRepository {
     }
 
     public void setFilter(String genre) {
-        DataHolder.filterGenre=genre;
+        return;
     }
 
     public List<String> getGenres() {

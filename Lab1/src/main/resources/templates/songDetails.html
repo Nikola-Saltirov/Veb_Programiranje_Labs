@@ -8,19 +8,23 @@
 <header>
     <h1 th:text="${songTitle}"></h1>
 </header>
+
 <section>
-    <strong> Genre: </strong><th:block th:text="${genre}"></th:block></br>
-    <strong> Release Year: </strong><th:block th:text="${year}"></th:block>
-    <strong> Grade: </strong><th:block th:text="${grade}"></th:block>
+    <strong> Genre: </strong><th:block th:text="${genre}"></th:block><br>
+    <strong> Release Year: </strong><th:block th:text="${year}"></th:block><br>
+    <strong> Album: </strong><th:block th:text="${album}"></th:block>
     <h2>Performers:</h2>
     <ul th:each="artist : ${artists}">
-        <li>
-            <span th:text="${artist.getName()}"></span>
-            <span> </span>
-            <span th:text="${artist.getLastName()}"></span>
-        </li>
+        <li th:text="${artist.getFirstName() + ' ' + artist.getLastName()}"></li>
     </ul>
 </section>
+<form th:action="@{'/artist'}" th:method="POST" style="display: inline">
+    <input type="text" th:value="${trackId}" name="trackId" hidden="hidden">
+    <button type="submit">Add another Artist</button>
+</form>
+<form th:action="@{'/songs'}" th:method="GET" style="display: inline">
+    <button type="submit">View all songs</button>
+</form>
 
 </body>
 </html>
