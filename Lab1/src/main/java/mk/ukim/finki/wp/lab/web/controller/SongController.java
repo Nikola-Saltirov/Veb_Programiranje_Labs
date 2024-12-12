@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.lab.web.controller;
 
 
 import mk.ukim.finki.wp.lab.service.AlbumService;
+import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/songs")
 public class SongController {
-    AlbumService albumService;
-    SongService songService;
+    private final AlbumService albumService;
+    private final SongService songService;
+    private final ArtistService artistService;
 
-    public SongController(AlbumService albumService, SongService songService) {
+    public SongController(AlbumService albumService, SongService songService, ArtistService artistService) {
         this.albumService = albumService;
         this.songService = songService;
+        this.artistService = artistService;
     }
 
     @GetMapping
@@ -52,7 +55,8 @@ public class SongController {
                            @RequestParam Long albumId) {
 
         try {
-            songService.editSong(songId, title, trackId, genre, Integer.parseInt(releaseYear), albumService.findById(albumId).orElse(null));
+            songService.editSong(songId, title, trackId, genre, Integer.parseInt(releaseYear),
+                    albumService.findById(albumId).orElse(null));
         }
         catch (Exception e){
             return "redirect:/addSong";
@@ -79,10 +83,11 @@ public class SongController {
     @PostMapping("/delete/{id}")
     public String deleteSong(@PathVariable Long id) {
         try {
+            artistService.removeSongFromArtists(id);
             songService.deleteById(id);
         }
         catch (Exception e) {
-            return "redirect:/add";
+            return "redirect:/songs";
         }
         return "redirect:/songs";
     }

@@ -27,7 +27,7 @@ public class SongDetailsController {
         model.addAttribute("genre", song.getGenre());
         model.addAttribute("year", song.getReleaseYear());
         model.addAttribute("album", song.getAlbum().getName());
-        model.addAttribute("artists", song.getPerformers());
+        model.addAttribute("artists", song.getArtists());
         //TODO
         model.addAttribute("grade", song.getAvg());
         return "songDetails";

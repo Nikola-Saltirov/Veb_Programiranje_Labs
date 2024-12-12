@@ -39,7 +39,7 @@ public class ArtistServlet extends HttpServlet {
 
         context.setVariable("artists", artistService.listArtists().stream()
                 .filter(x-> !songService.findByTrackId(songId)
-                        .getPerformers().contains(x)).collect(Collectors.toList()));
+                        .getArtists().contains(x)).collect(Collectors.toList()));
 
         context.setVariable("selectedSong",songId);
         templateEngine.process("artistsList.html", context, resp.getWriter());

@@ -1,14 +1,12 @@
-package mk.ukim.finki.wp.lab.repository;
+package mk.ukim.finki.wp.lab.repository.inMemory;
 import mk.ukim.finki.wp.lab.bootstrap.DataHolder;
 
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -39,7 +37,7 @@ public class SongRepository {
     }
 
     public void addArtistToSong(Artist artist, Song song) {
-        findByTrackId(song.getTrackId()).getPerformers().add(artist);
+        findByTrackId(song.getTrackId()).getArtists().add(artist);
     }
 
     public void deleteSong(Long id) {

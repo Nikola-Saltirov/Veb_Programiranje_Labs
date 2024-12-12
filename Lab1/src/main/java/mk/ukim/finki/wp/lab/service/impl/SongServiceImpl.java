@@ -1,26 +1,33 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
+import jakarta.transaction.Transactional;
 import mk.ukim.finki.wp.lab.model.Album;
 import mk.ukim.finki.wp.lab.model.Artist;
+import mk.ukim.finki.wp.lab.model.Grade;
 import mk.ukim.finki.wp.lab.model.Song;
-import mk.ukim.finki.wp.lab.model.exceptions.ArtistNotFoundException;
 import mk.ukim.finki.wp.lab.model.exceptions.MissingSongArguments;
-import mk.ukim.finki.wp.lab.model.exceptions.NoSongSelectedException;
 import mk.ukim.finki.wp.lab.model.exceptions.SongNotFoundException;
-import mk.ukim.finki.wp.lab.repository.ArtistRepository;
-import mk.ukim.finki.wp.lab.repository.SongRepository;
+import mk.ukim.finki.wp.lab.repository.JPA.GradeRepositoryJPA;
+import mk.ukim.finki.wp.lab.repository.JPA.SongRepositoryJPA;
+import mk.ukim.finki.wp.lab.repository.inMemory.SongRepository;
 import mk.ukim.finki.wp.lab.service.SongService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static mk.ukim.finki.wp.lab.bootstrap.DataHolder.artists;
+
 @Service
 public class SongServiceImpl implements SongService {
 
-    private final SongRepository songRepository;
+    private final SongRepositoryJPA songRepository;
+    private final GradeRepositoryJPA gradeRepository;
+    private final SongRepository sr;
 
-    public SongServiceImpl(SongRepository songRepository) {
+    public SongServiceImpl(SongRepositoryJPA songRepository, GradeRepositoryJPA gradeRepository, SongRepository sr) {
         this.songRepository = songRepository;
+        this.gradeRepository = gradeRepository;
+        this.sr = sr;
     }
 
 
@@ -30,7 +37,10 @@ public class SongServiceImpl implements SongService {
     }
 
     public void addArtistToSong(Artist artist, Song song) { //Zoshto vrakja Artist?
-        songRepository.addArtistToSong(artist, song);
+        List<Artist> artists = song.getArtists();
+        artists.add(artist);
+        song.setArtists(artists);
+        songRepository.save(song);
     }
 
     @Override
@@ -41,25 +51,32 @@ public class SongServiceImpl implements SongService {
     @Override
     public void addGrade(String songId, Integer grade) {
         Song song=songRepository.findByTrackId(songId);
-        song.addGrade(grade);
+        List<Grade> grades = song.getGrades();
+        grades.add(new Grade(grade));
+        song.setGrades(grades);
+        songRepository.save(song);
     }
     public Song findBySongId(Long id) {
-        return songRepository.findBySongId(id);
+        return songRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        songRepository.deleteSong(id);
+        if(id == null) {
+            throw new SongNotFoundException(id.toString());
+        }
+        songRepository.deleteById(id);
     }
 
     @Override
     public List<String> getGenres() {
-        return songRepository.getGenres();
+        return sr.getGenres();
     }
 
     @Override
     public void setFilter(String genre) {
-        songRepository.setFilter(genre);
+        sr.setFilter(genre);
     }
 
     @Override
@@ -67,10 +84,10 @@ public class SongServiceImpl implements SongService {
         if(title == null || title.isEmpty()
                 || trackId == null || trackId.isEmpty()
                 || genre == null || genre.isEmpty() || album == null) {
-            throw new MissingSongArguments();
+            throw new SongNotFoundException(trackId.toString());
         }
 
-        songRepository.saveSong(new Song(trackId, title, genre, releaseYear, album));
+        songRepository.save(new Song(trackId, title, genre, releaseYear, album));
     }
 
     @Override
@@ -88,7 +105,7 @@ public class SongServiceImpl implements SongService {
         editedSong.setGenre(genre);
         editedSong.setReleaseYear(releaseYear);
         editedSong.setAlbum(album);
-        songRepository.saveSong(editedSong);
+        songRepository.save(editedSong);
     }
 
 

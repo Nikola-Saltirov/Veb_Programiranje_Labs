@@ -1,7 +1,8 @@
 package mk.ukim.finki.wp.lab.service.impl;
 
 import mk.ukim.finki.wp.lab.model.Album;
-import mk.ukim.finki.wp.lab.repository.AlbumRepository;
+import mk.ukim.finki.wp.lab.repository.JPA.AlbumRepositoryJPA;
+import mk.ukim.finki.wp.lab.repository.inMemory.AlbumRepository;
 import mk.ukim.finki.wp.lab.service.AlbumService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
-    AlbumRepository albumRepository;
+    private final AlbumRepositoryJPA albumRepository;
 
-    public AlbumServiceImpl(AlbumRepository albumRepository) {
+    public AlbumServiceImpl(AlbumRepositoryJPA albumRepository) {
         this.albumRepository = albumRepository;
     }
 

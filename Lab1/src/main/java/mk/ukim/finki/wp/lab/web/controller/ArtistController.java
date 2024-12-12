@@ -26,7 +26,7 @@ public class ArtistController {
 
     @PostMapping
     public String getAddArtistPage(@RequestParam String trackId, @RequestParam String grade, Model model) {
-        model.addAttribute("artists", artistService.listArtists().stream().filter(x->!songService.findByTrackId(trackId).getPerformers().contains(x)));
+        model.addAttribute("artists", artistService.listArtists().stream().filter(x->!songService.findByTrackId(trackId).getArtists().contains(x)));
         model.addAttribute("songId", trackId);
         String resultString = grade.replaceAll(",", "");
         songService.addGrade(trackId,Integer.parseInt(resultString));
