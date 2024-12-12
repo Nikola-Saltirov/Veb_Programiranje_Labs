@@ -13,7 +13,7 @@ import java.util.List;
 public class DataHolder {
     public static List<Artist> artists = null;
     public static List<Song> songs = null;
-    public static List<Album> albums;
+    public static List<Album> albums = null;
 
     @PostConstruct
     public void init(){
