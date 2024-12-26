@@ -1,12 +1,38 @@
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="utf-8">
     <title>Song Details</title>
-
+    <style type="text/css">
+        body {
+            width: 1000px;
+            margin: auto;
+        }
+        .btn_form{
+            display: inline;
+        }
+        span{
+            margin: 2px;
+        }
+        .log{
+            display: inline;
+            width: 70px;
+            margin: 2px;
+        }
+    </style>
 </head>
 <body>
 <header>
     <h1 th:text="${songTitle}"></h1>
+    <th:block><br>
+        <form th:action="@{'/login'}" th:method="GET" class="log">
+            <button type="submit">Login</button>
+        </form>
+        <form th:action="@{'/logout'}" th:method="GET" class="log">
+            <button type="submit">Logout</button>
+        </form>
+
+    </th:block>
 </header>
 
 <section>
@@ -18,10 +44,12 @@
         <li th:text="${artist.getName() + ' ' + artist.getLastName()}"></li>
     </ul>
 </section>
+<th:block sec:authorize="hasRole('ADMIN')">
 <form th:action="@{'/artist'}" th:method="POST" style="display: inline">
     <input type="text" th:value="${trackId}" name="trackId" hidden="hidden">
     <button type="submit">Add another Artist</button>
 </form>
+</th:block>
 <form th:action="@{'/songs'}" th:method="GET" style="display: inline">
     <button type="submit">View all songs</button>
 </form>

@@ -1,4 +1,5 @@
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="utf-8">
     <title>Welcome to My Music Store</title>
@@ -13,32 +14,75 @@
         span{
             margin: 2px;
         }
+        .log{
+            display: inline;
+            width: 70px;
+            margin: 2px;
+        }
+        .loggedIn{
+            font-size: 16px;
+
+        }
+        #user{
+            color: green;
+        }
+        #noUser{
+            color: red;
+        }
+        #errorMsg{
+            display: inline-block;
+            border-style: solid;
+            border-color: darkred;
+            background-color: orangered;
+            color: black;
+            width: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        h1{
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
 <header>
     <h1>Welcome to My Music Store</h1>
+    <th:block><br>
+        <form th:action="@{'/login'}" th:method="GET" class="log">
+            <button type="submit">Login</button>
+        </form>
+        <form th:action="@{'/logout'}" th:method="GET" class="log">
+            <button type="submit">Logout</button>
+        </form>
+    </th:block>
+    <div>
+        <span   class="loggedIn" th:text="${#authentication.name != 'anonymousUser' ? 'Currently logged in: '+#authentication.name : 'No one logged in'}"
+                th:id="${#authentication.name != 'anonymousUser' ? 'user' : 'noUser'}"></span>
+    </div>
 </header>
 <main>
+    <h3 id="errorMsg" th:if="${error != null}" th:text="${error}"></h3>
     <h2>Choose a song to add an artist:</h2>
-    <form th:action="@{'/artist'}" th:method="POST">
+    <form th:action="${#authorization.expression('hasRole(''ADMIN'')')} ? '/artist' : 'songs/details'" th:method="POST">
         <th:block th:each="song : ${songs}">
             <label>
-                <input type="radio" name="trackId" th:value="${song.getTrackId()}">
+                <input class="songSelection" type="radio" name="trackId" th:value="${song.getTrackId()}">
                 Title: <span th:text="${song.getTitle()}"></span>
                 Genre: <span th:text="${song.getGenre()}"></span>
                 Release Year: <span th:text="${song.getReleaseYear()}"></span>
                 Album : <span th:text="${song.getAlbum().getName()}"></span>
             </label><br>
         </th:block><br>
-
-        <button type="submit">Submit</button>
+        <button type="submit" id="submitBtn">Submit</button>
     </form>
+    <button id="clearBtn">Clear Selection</button>
 
+
+    <th:block sec:authorize="hasRole('ADMIN')">
     <h2>Add, edit or delete a song:</h2>
     <th:block th:each="song : ${songs}">
 
-        Title: <span th:text="${song.getTitle()}"></span>
+        Title: <span th:text="${song.getTitle()}"></span>`
         Genre: <span th:text="${song.getGenre()}"></span>
         Release Year: <span th:text="${song.getReleaseYear()}"></span>
         Album : <span th:text="${song.getAlbum().getName()}"></span>
@@ -53,13 +97,25 @@
         <br>
 
     </th:block><br>
-
     <form th:action="@{'/songs/add'}" th:method="GET">
         <button type="submit">Add New Song</button>
     </form>
-
+    </th:block>
 
 
 </main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const button = document.getElementById("clearBtn");
+        button.addEventListener("click", function () {
+            const radioButtons = document.querySelectorAll(".songSelection");
+
+            console.log(radioButtons)
+            radioButtons.forEach((radio) => {
+                radio.checked = false;
+            });
+        });
+    });
+</script>
 </body>
 </html>

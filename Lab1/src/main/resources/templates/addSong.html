@@ -6,6 +6,7 @@
     <title>Title</title>
 </head>
 <body>
+
 <h2 th:text="(${songId == null} ? 'Add new song' : 'Edit song')"></h2>
 <div th:if="${songId != null}">
     Title: <span th:text="${song.getTitle()}"></span><br>

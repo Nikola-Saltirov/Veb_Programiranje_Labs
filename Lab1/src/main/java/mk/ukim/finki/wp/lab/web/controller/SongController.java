@@ -4,6 +4,7 @@ package mk.ukim.finki.wp.lab.web.controller;
 import mk.ukim.finki.wp.lab.service.AlbumService;
 import mk.ukim.finki.wp.lab.service.ArtistService;
 import mk.ukim.finki.wp.lab.service.SongService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,14 @@ public class SongController {
     public String getSongsPage(@RequestParam(required = false) String error, Model model) {
         model.addAttribute("albums", albumService.findAll());
         model.addAttribute("songs", songService.listSongs());
-        model.addAttribute("error", error);
+        if (error != null) {
+            model.addAttribute("error", "PLEASE SELECT A SONG");
+        }
         return "listSongs";
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveSong(@RequestParam String title,
                            @RequestParam String trackId,
                            @RequestParam String genre,
@@ -46,6 +50,7 @@ public class SongController {
         return "redirect:/songs";
     }
     @PostMapping("/edit/{songId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editSong(@PathVariable Long songId,
                            @RequestParam String title,
                            @RequestParam String trackId,
@@ -64,6 +69,7 @@ public class SongController {
     }
 
     @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getEditSongForm(@PathVariable Long id, Model model) {
         model.addAttribute("albums", albumService.findAll());
         model.addAttribute("song", songService.findBySongId(id));
@@ -72,6 +78,7 @@ public class SongController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAddSongPage(Model model) {
         model.addAttribute("albums", albumService.findAll());
         return "addSong";
@@ -80,6 +87,7 @@ public class SongController {
 
 
     @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteSong(@PathVariable Long id) {
         try {
             artistService.removeSongFromArtists(id);
@@ -89,6 +97,16 @@ public class SongController {
             return "redirect:/songs";
         }
         return "redirect:/songs";
+    }
+
+    @PostMapping("/details")
+    public String detailsSong(@RequestParam(required = false) String trackId) {
+        if (trackId != null) {
+            return "redirect:/songDetails/" + songService.findByTrackId(trackId).getId();
+        }
+        else {
+            return "redirect:/songs?error=SelectSong";
+        }
     }
 
 }
