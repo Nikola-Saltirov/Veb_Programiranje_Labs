@@ -29,6 +29,7 @@ public class SongDetailsController {
         model.addAttribute("year", song.getReleaseYear());
         model.addAttribute("album", song.getAlbum().getName());
         model.addAttribute("artists", song.getArtists());
+        model.addAttribute("songId", id);
         return "songDetails";
     }
 }

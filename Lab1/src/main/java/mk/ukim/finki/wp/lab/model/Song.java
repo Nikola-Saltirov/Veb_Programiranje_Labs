@@ -27,7 +27,6 @@ public class Song {
     @ManyToMany(mappedBy = "songs")
     private List<Artist> artists = new ArrayList<>();
 
-
     @ManyToOne
     private Album album;
 

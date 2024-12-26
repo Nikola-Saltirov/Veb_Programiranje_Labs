@@ -15,7 +15,7 @@
     <strong> Album: </strong><th:block th:text="${album}"></th:block>
     <h2>Performers:</h2>
     <ul th:each="artist : ${artists}">
-        <li th:text="${artist.getFirstName() + ' ' + artist.getLastName()}"></li>
+        <li th:text="${artist.getName() + ' ' + artist.getLastName()}"></li>
     </ul>
 </section>
 <form th:action="@{'/artist'}" th:method="POST" style="display: inline">
@@ -25,6 +25,5 @@
 <form th:action="@{'/songs'}" th:method="GET" style="display: inline">
     <button type="submit">View all songs</button>
 </form>
-
 </body>
 </html>
