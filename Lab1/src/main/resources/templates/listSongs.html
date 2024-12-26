@@ -48,7 +48,7 @@
 <header>
     <h1>Welcome to My Music Store</h1>
     <th:block><br>
-        <form th:action="@{'/login'}" th:method="GET" class="log">
+            <form th:action="${#authentication.name != 'anonymousUser' ? '/songs' : '/login'}" th:method="GET" class="log">
             <button type="submit">Login</button>
         </form>
         <form th:action="@{'/logout'}" th:method="GET" class="log">

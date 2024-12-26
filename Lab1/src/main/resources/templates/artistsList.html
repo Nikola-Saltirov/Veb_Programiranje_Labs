@@ -36,7 +36,7 @@
 
         <th:block th:each="artist : ${artists}">
             <label>
-                <input type="radio" name="artistId" th:value="${artist.getId()}">
+                <input class="songSelection" type="radio" name="artistId" th:value="${artist.getId()}">
             </label>
             <label>
                 <span th:text="${artist.getName() + ' ' + artist.getLastName()}"></span>
@@ -46,6 +46,7 @@
         </th:block>
         <button type="submit">Add artist</button>
     </form>
+    <button id="clearBtn" style="display: inline">Clear Selection</button>
     <form th:action="@{'/songs'}" th:method="GET" style="display: inline">
         <button type="submit">Go back</button>
     </form>
@@ -59,5 +60,18 @@
         </tr>
     </table>
 </aside>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const button = document.getElementById("clearBtn");
+        button.addEventListener("click", function () {
+            const radioButtons = document.querySelectorAll(".songSelection");
+
+            console.log(radioButtons)
+            radioButtons.forEach((radio) => {
+                radio.checked = false;
+            });
+        });
+    });
+</script>
 </body>
 </html>

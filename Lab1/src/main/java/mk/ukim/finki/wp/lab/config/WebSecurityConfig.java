@@ -29,7 +29,7 @@ public class WebSecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/songs")
+                        .requestMatchers("/", "/songs", "/h2")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest()
@@ -45,9 +45,6 @@ public class WebSecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/songs")
-                )
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/access_denied")
                 );
 
         return http.build();
@@ -58,9 +55,8 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user1 = User.builder().username("ns").password(passwordEncoder.encode("ns")).roles("USER").build();
-        UserDetails user2 = User.builder().username("kire").password(passwordEncoder.encode("kire")).roles("USER").build();
-        UserDetails admin = User.builder().username("admin").password(passwordEncoder.encode("ad")).roles("ADMIN").build();
+        UserDetails admin = User.builder().username("ad").password(passwordEncoder.encode("ad")).roles("ADMIN").build();
 
-        return new InMemoryUserDetailsManager(user1,user2,admin);
+        return new InMemoryUserDetailsManager(user1,admin);
     }
 }

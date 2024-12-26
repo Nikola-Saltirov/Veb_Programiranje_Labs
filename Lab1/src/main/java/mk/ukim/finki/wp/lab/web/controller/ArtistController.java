@@ -26,22 +26,30 @@ public class ArtistController {
     }
 
     @PostMapping
-    public String getAddArtistPage(@RequestParam String trackId, Model model) {
-        model.addAttribute("artists", artistService.listArtists().stream()
-                .filter(x->!songService.findByTrackId(trackId).getArtists().contains(x)));
-        model.addAttribute("songId", trackId);
-        return "artistsList";
+    public String getAddArtistPage(@RequestParam(required = false) String trackId, Model model) {
+        if (trackId != null) {
+            model.addAttribute("artists", artistService.listArtists().stream()
+                    .filter(x->!songService.findByTrackId(trackId).getArtists().contains(x)));
+            model.addAttribute("songId", trackId);
+            return "artistsList";
+        }else{
+            return "redirect:/songs?error=NoSelected";
+        }
     }
 
     @PostMapping("/add/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String addArtist(@PathVariable String id,
-                            @RequestParam Long artistId) {
+                            @RequestParam (required = false) Long artistId) {
 
-        Song song = songService.findByTrackId(id);
-        Artist artist = artistService.findById(artistId).orElse(null);
-        artistService.addSongToArtist(artist, song);
-        return "redirect:/songDetails/" + song.getId();
+        if (artistId != null) {
+            Song song = songService.findByTrackId(id);
+            Artist artist = artistService.findById(artistId).orElse(null);
+            artistService.addSongToArtist(artist, song);
+            return "redirect:/songDetails/" + song.getId();
+        }else{
+            return "redirect:/artist?trackId=" + id;
+        }
     }
 
 }
